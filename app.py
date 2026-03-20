@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pickle
 import numpy as np
@@ -10,6 +9,7 @@ with open("lung_cancer_rf_model.pkl", "rb") as file:
 st.title("Lung Cancer Prediction Using Machine Learning")
 st.write("Enter patient symptom values (1 = No, 2 = Yes)")
 
+# Input fields
 yellow_fingers = st.selectbox("Yellow Fingers", [1, 2])
 anxiety = st.selectbox("Anxiety", [1, 2])
 peer_pressure = st.selectbox("Peer Pressure", [1, 2])
@@ -21,15 +21,30 @@ coughing = st.selectbox("Coughing", [1, 2])
 swallowing_difficulty = st.selectbox("Swallowing Difficulty", [1, 2])
 chest_pain = st.selectbox("Chest Pain", [1, 2])
 
+# Convert UI values: 1 = No, 2 = Yes  -->  0 = No, 1 = Yes
+def convert_input(value):
+    return 0 if value == 1 else 1
+
 if st.button("Predict"):
-    input_data = np.array([[yellow_fingers, anxiety, peer_pressure,
-                            chronic_disease, allergy, wheezing,
-                            alcohol_consuming, coughing,
-                            swallowing_difficulty, chest_pain]])
+    input_data = np.array([[
+        convert_input(yellow_fingers),
+        convert_input(anxiety),
+        convert_input(peer_pressure),
+        convert_input(chronic_disease),
+        convert_input(allergy),
+        convert_input(wheezing),
+        convert_input(alcohol_consuming),
+        convert_input(coughing),
+        convert_input(swallowing_difficulty),
+        convert_input(chest_pain)
+    ]])
 
-    prediction = model.predict(input_data)[0]
+    prediction = model.predict(input_data)
 
-    if prediction == 1:
+    if prediction[0] == 1:
         st.error("Prediction Result: Lung Cancer Detected")
     else:
-        st.success("Prediction Result: No Lung Cancer")
+        st.success("Prediction Result: No Lung Cancer Detected")
+
+
+    
