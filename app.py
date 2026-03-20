@@ -42,9 +42,9 @@ if st.button("Predict"):
     prediction = model.predict(input_data)
 
     if prediction[0] == 1:
-        st.error("Prediction Result: Lung Cancer Detected")
+     st.error("Prediction Result: High Risk of Lung Cancer")
     else:
-        st.success("Prediction Result: No Lung Cancer Detected")
+    st.success("Prediction Result: Low Risk of Lung Cancer")
 
 
     
