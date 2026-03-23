@@ -1,51 +1,7 @@
 import streamlit as st
 import pickle
 import numpy as np
-st.markdown("""
-    <style>
-    .stApp {
-        background: linear-gradient(to bottom, #f7fbff, #eef6ff);
-    }
 
-    .main-title {
-        text-align: center;
-        font-size: 48px;
-        font-weight: 800;
-        color: #1f3b73;
-        margin-bottom: 10px;
-    }
-
-    .sub-text {
-        text-align: center;
-        font-size: 18px;
-        color: #4a5a6a;
-        margin-bottom: 30px;
-    }
-
-    .banner-box {
-        background-color: #dff1ff;
-        padding: 18px;
-        border-radius: 16px;
-        text-align: center;
-        margin-bottom: 25px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    div.stButton > button {
-        background-color: #1f77b4;
-        color: white;
-        border-radius: 10px;
-        padding: 10px 22px;
-        border: none;
-        font-weight: 600;
-    }
-
-    div.stButton > button:hover {
-        background-color: #145a86;
-        color: white;
-    }
-    </style>
-""", unsafe_allow_html=True)
 # Load saved model
 with open("lung_cancer_rf_model.pkl", "rb") as file:
     model = pickle.load(file)
