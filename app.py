@@ -4,8 +4,8 @@ import numpy as np
 import base64
 
 # ---------- Background Image Function ----------
-def add_bg_from_local(lungs_bg.jpg):
-    with open(lungs_bg.jpg, "rb") as image:
+def add_bg_from_local(image_file):
+    with open(image_file, "rb") as image:
         encoded_string = base64.b64encode(image.read()).decode()
 
     st.markdown(
@@ -125,3 +125,4 @@ if st.button("Predict"):
         st.error("Prediction Result: Yes - Lung Cancer Detected")
     else:
         st.success("Prediction Result: No - Lung Cancer Not Detected")
+
