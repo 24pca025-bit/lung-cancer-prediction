@@ -81,10 +81,6 @@ with open("lung_cancer_rf_model.pkl", "rb") as file:
 
 # ---------- Heading ----------
 st.markdown(
-    '<div class="banner-box">🫁 <b>AI-Based Lung Cancer Screening System</b> 🫁</div>',
-    unsafe_allow_html=True
-)
-st.markdown(
     '<div class="main-title">Lung Cancer Prediction Using Machine Learning</div>',
     unsafe_allow_html=True
 )
