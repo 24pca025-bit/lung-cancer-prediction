@@ -27,14 +27,19 @@ def convert_input(value):
 
 if st.button("Predict"):
     input_data = np.array([[
+        convert_input(gender),
+        convert_input(age),
+        convert_input(smoking),
         convert_input(yellow_fingers),
         convert_input(anxiety),
         convert_input(peer_pressure),
         convert_input(chronic_disease),
+        convert_input(fatique),
         convert_input(allergy),
         convert_input(wheezing),
         convert_input(alcohol_consuming),
         convert_input(coughing),
+        convert_input(shortness or breath),
         convert_input(swallowing_difficulty),
         convert_input(chest_pain)
     ]])
