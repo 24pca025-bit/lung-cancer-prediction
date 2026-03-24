@@ -71,22 +71,6 @@ def add_bg_from_local(image_file):
                 text-align: center;
             }}
 
-            div.stButton > button {{
-                background: linear-gradient(to right, #0f4c81, #1f77b4);
-                color: white;
-                border-radius: 12px;
-                padding: 10px 24px;
-                border: none;
-                font-weight: 700;
-                font-size: 16px;
-                width: 100%;
-            }}
-
-            div.stButton > button:hover {{
-                background: linear-gradient(to right, #0b3c66, #145a86);
-                color: white;
-            }}
-
             [data-baseweb="select"] > div,
             .stNumberInput > div > div > input,
             .stTextInput > div > div > input {{
@@ -138,10 +122,39 @@ if st.session_state.page == "home":
         unsafe_allow_html=True
     )
 
-    col1, col2, col3 = st.columns([1, 2, 1])
+    # Extra space for center alignment
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
 
-    with col2:
-        if st.button("Start Prediction"):
+    # Center button
+    left, center, right = st.columns([2, 3, 2])
+
+    with center:
+        st.markdown("""
+            <style>
+            div.stButton > button:first-child {
+                display: block;
+                margin: 0 auto;
+                width: 100%;
+                max-width: 280px;
+                height: 55px;
+                border-radius: 14px;
+                font-size: 20px;
+                font-weight: 700;
+                background: linear-gradient(to right, #0f4c81, #1f77b4);
+                color: white;
+                border: none;
+                box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            }
+            div.stButton > button:first-child:hover {
+                background: linear-gradient(to right, #0b3c66, #145a86);
+                color: white;
+                transform: scale(1.02);
+                transition: 0.2s ease-in-out;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+
+        if st.button("Start Prediction", key="start_prediction_btn"):
             st.session_state.page = "prediction"
             safe_rerun()
 
@@ -240,4 +253,3 @@ elif st.session_state.page == "result":
         if st.button("Go to Home Page"):
             st.session_state.page = "home"
             safe_rerun()
-   
