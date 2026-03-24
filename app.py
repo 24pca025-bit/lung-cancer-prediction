@@ -63,7 +63,8 @@ def add_bg_from_local(image_file):
         }}
 
         [data-baseweb="select"] > div,
-        .stNumberInput > div > div > input {{
+        .stNumberInput > div > div > input,
+        .stTextInput > div > div > input {{
             background-color: rgba(255,255,255,0.88);
             border-radius: 10px;
         }}
@@ -81,6 +82,10 @@ with open("lung_cancer_rf_model.pkl", "rb") as file:
 
 # ---------- Heading ----------
 st.markdown(
+    '<div class="banner-box">🫁 <b>AI-Based Lung Cancer Screening System</b> 🫁</div>',
+    unsafe_allow_html=True
+)
+st.markdown(
     '<div class="main-title">Lung Cancer Prediction Using Machine Learning</div>',
     unsafe_allow_html=True
 )
@@ -90,6 +95,8 @@ st.markdown(
 )
 
 # ---------- Input Fields ----------
+name = st.text_input("Patient Name")
+
 gender = st.selectbox("Gender (Male=1, Female=0)", [1, 0])
 age = st.number_input("Age", min_value=1, max_value=120, value=30)
 smoking = st.selectbox("Smoking (1 = No, 2 = Yes)", [1, 2])
@@ -118,7 +125,12 @@ if st.button("Predict"):
     prediction = model.predict(input_data)
 
     if prediction[0] == 1:
-        st.error("Prediction Result: Yes - Lung Cancer Detected")
+        if name:
+            st.error(f"Prediction Result for {name}: Yes - Lung Cancer Detected")
+        else:
+            st.error("Prediction Result: Yes - Lung Cancer Detected")
     else:
-        st.success("Prediction Result: No - Lung Cancer Not Detected")
-
+        if name:
+            st.success(f"Prediction Result for {name}: No - Lung Cancer Not Detected")
+        else:
+            st.success("Prediction Result: No - Lung Cancer Not Detected")
