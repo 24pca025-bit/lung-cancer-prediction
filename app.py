@@ -120,7 +120,7 @@ if "patient_name" not in st.session_state:
 if st.session_state.page == "home":
 
     st.markdown(
-        '<div class="main-title">LUNG CANCER PREDICTION</div>',
+        '<div class="main-title">Lung Cancer Prediction Using Machine Learning</div>',
         unsafe_allow_html=True
     )
 
@@ -137,18 +137,16 @@ if st.session_state.page == "home":
         st.markdown(
             """
             <style>
-            <center>
             div[data-testid="stButton"] > button {
                 min-height: 60px;
                 font-size: 18px;
-                </center>
                 background: linear-gradient(to right, #0f4c81, #1f77b4);
                 color: white;
                 box-shadow: 0 6px 16px rgba(0,0,0,0.15);
             }
             div[data-testid="stButton"] > button:hover {
                 background: linear-gradient(to right, #0b3c66, #145a86);
-                color: White;
+                color: white;
             }
             </style>
             """,
@@ -159,7 +157,7 @@ if st.session_state.page == "home":
             st.session_state.page = "prediction"
 
 # ---------- PREDICTION PAGE ----------
-elif st.session_state.page == "PREDICTION":
+elif st.session_state.page == "prediction":
 
     st.markdown(
         '<div class="section-title">Enter Patient Details and Symptoms</div>',
@@ -232,13 +230,14 @@ elif st.session_state.page == "PREDICTION":
         if st.button("Back to Home", key="back_home_btn"):
             st.session_state.page = "home"
 
-# ---------- RESULT ----------
-elif st.session_state.page == "result":
+# ---------- RESULT PAGE ----------
+elif st.session_state.page == "RESULT":
 
     st.markdown(
-        '<div class="section-title"> RESULT</div>',
-         unsafe_allow_html=True
-        )
+        '<div class="section-title">Result</div>',
+        unsafe_allow_html=True
+    )
+
     patient_name = st.session_state.patient_name
     result = st.session_state.prediction_result
 
@@ -265,7 +264,3 @@ elif st.session_state.page == "result":
     with col2:
         if st.button("Go to Home Page", key="go_home_btn"):
             st.session_state.page = "home"
-            
-           
-         
-   
