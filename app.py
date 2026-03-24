@@ -66,6 +66,7 @@ def add_bg_from_local(image_file):
             border: none;
             font-weight: 700;
             font-size: 16px;
+            width: 100%;
         }}
 
         div.stButton > button:hover {{
@@ -113,98 +114,4 @@ if st.session_state.page == "home":
         unsafe_allow_html=True
     )
 
-    col1, col2, col3 = st.columns([1, 2, 1])
-
-    with col2:
-        if st.button("Start Prediction"):
-            st.session_state.page = "prediction"
-            st.rerun()
-
-# ---------- PREDICTION PAGE ----------
-elif st.session_state.page == "prediction":
-   
-    st.markdown(
-        '<div class="section-title">Enter Patient Details and Symptoms</div>',
-        unsafe_allow_html=True
-    )
-
-    name = st.text_input("Patient Name")
-
-    gender = st.selectbox("Gender (Male=1, Female=0)", [1, 0])
-    age = st.number_input("Age", min_value=1, max_value=120, value=30)
-    smoking = st.selectbox("Smoking (1 = No, 2 = Yes)", [1, 2])
-    fatigue = st.selectbox("Fatigue (1 = No, 2 = Yes)", [1, 2])
-    shortness_of_breath = st.selectbox("Shortness of Breath (1 = No, 2 = Yes)", [1, 2])
-
-    yellow_fingers = st.selectbox("Yellow Fingers (1 = No, 2 = Yes)", [1, 2])
-    anxiety = st.selectbox("Anxiety (1 = No, 2 = Yes)", [1, 2])
-    peer_pressure = st.selectbox("Peer Pressure (1 = No, 2 = Yes)", [1, 2])
-    chronic_disease = st.selectbox("Chronic Disease (1 = No, 2 = Yes)", [1, 2])
-    allergy = st.selectbox("Allergy (1 = No, 2 = Yes)", [1, 2])
-    wheezing = st.selectbox("Wheezing (1 = No, 2 = Yes)", [1, 2])
-    alcohol_consuming = st.selectbox("Alcohol Consuming (1 = No, 2 = Yes)", [1, 2])
-    coughing = st.selectbox("Coughing (1 = No, 2 = Yes)", [1, 2])
-    swallowing_difficulty = st.selectbox("Swallowing Difficulty (1 = No, 2 = Yes)", [1, 2])
-    chest_pain = st.selectbox("Chest Pain (1 = No, 2 = Yes)", [1, 2])
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("Predict"):
-            input_data = np.array([[gender, age, smoking, fatigue, shortness_of_breath,
-                                    yellow_fingers, anxiety, peer_pressure,
-                                    chronic_disease, allergy, wheezing,
-                                    alcohol_consuming, coughing,
-                                    swallowing_difficulty, chest_pain]])
-
-            prediction = model.predict(input_data)
-
-            st.session_state.patient_name = name
-
-            if prediction[0] == 1:
-                st.session_state.prediction_result = "Lung Cancer"
-            else:
-                st.session_state.prediction_result = "No Lung Cancer"
-
-            st.session_state.page = "result"
-            st.rerun()
-
-    with col2:
-        if st.button("Back to Home"):
-            st.session_state.page = "home"
-            st.rerun()
-
-# ---------- RESULT PAGE ----------
-elif st.session_state.page == "result":
-    
-    st.markdown(
-        '<div class="section-title">Final Result</div>',
-        unsafe_allow_html=True
-    )
-
-    patient_name = st.session_state.patient_name
-    result = st.session_state.prediction_result
-
-    st.markdown('<div class="result-box">', unsafe_allow_html=True)
-
-    if patient_name:
-        st.write(f"### Patient Name: {patient_name}")
-
-    if result == "Lung Cancer":
-        st.error("Prediction Result: Lung Cancer")
-    else:
-        st.success("Prediction Result: No Lung Cancer")
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("Back to Prediction Page"):
-            st.session_state.page = "prediction"
-            st.rerun()
-
-    with col2:
-        if st.button("Go to Home Page"):
-            st.session_state.page = "home"
-            st.rerun()
+    st.mark
