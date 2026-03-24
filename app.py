@@ -120,7 +120,7 @@ if "patient_name" not in st.session_state:
 if st.session_state.page == "home":
 
     st.markdown(
-        '<div class="main-title">Lung Cancer Prediction Using Machine Learning</div>',
+        '<div class="main-title">LUNG CANCER PREDICTION </div>',
         unsafe_allow_html=True
     )
 
