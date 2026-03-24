@@ -134,17 +134,6 @@ if st.session_state.page == "home":
         unsafe_allow_html=True
     )
 
-    st.markdown(
-        """
-        <div class="intro-box">
-        <b>Welcome!</b><br><br>
-        This application predicts lung cancer based on patient details and symptoms using a trained machine learning model.
-        <br><br>
-        Click the button below to continue to the prediction page.
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
 
     if st.button("Start Prediction"):
         st.session_state.page = "prediction"
