@@ -123,9 +123,9 @@ if st.button("Predict"):
 
     if prediction[0] == 1:
         if name:
-            st.error(f"Prediction Result for {name}: Lung Cancer")
+            st.error(f"Prediction Result for {name}:  Yes Lung Cancer")
         else:
-            st.error("Prediction Result: Lung Cancer")
+            st.error("Prediction Result: Yes Lung Cancer")
     else:
         if name:
             st.success(f"Prediction Result for {name}: No Lung Cancer")
