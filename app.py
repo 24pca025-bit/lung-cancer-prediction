@@ -40,27 +40,6 @@ def add_bg_from_local(image_file):
             font-weight: 500;
         }}
 
-        .banner-box {{
-            background: rgba(255, 255, 255, 0.78);
-            padding: 16px;
-            border-radius: 18px;
-            text-align: center;
-            margin-bottom: 24px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.10);
-            border: 1px solid rgba(16, 42, 67, 0.10);
-        }}
-
-        .intro-box {{
-            background: rgba(255, 255, 255, 0.82);
-            padding: 18px;
-            border-radius: 16px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            color: #243b53;
-            font-size: 17px;
-            line-height: 1.7;
-        }}
-
         .section-title {{
             font-size: 28px;
             font-weight: 800;
@@ -134,13 +113,12 @@ if st.session_state.page == "home":
         unsafe_allow_html=True
     )
 
+    col1, col2, col3 = st.columns([1, 2, 1])
 
-   col1, col2, col3 = st.columns([1, 2, 1])
-
-with col2:
-    if st.button("Start Prediction"):
-        st.session_state.page = "prediction"
-        st.rerun()
+    with col2:
+        if st.button("Start Prediction"):
+            st.session_state.page = "prediction"
+            st.rerun()
 
 # ---------- PREDICTION PAGE ----------
 elif st.session_state.page == "prediction":
@@ -230,4 +208,3 @@ elif st.session_state.page == "result":
         if st.button("Go to Home Page"):
             st.session_state.page = "home"
             st.rerun()
-           
