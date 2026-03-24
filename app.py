@@ -58,12 +58,63 @@ def add_bg_from_local(image_file):
             }}
 
             .result-box {{
-                background: rgba(255,255,255,0.92);
-                padding: 22px;
+                background: rgba(255,255,255,0.94);
+                padding: 28px;
                 border-radius: 18px;
                 margin-top: 20px;
-                box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+                box-shadow: 0 8px 22px rgba(0,0,0,0.25);
                 text-align: center;
+            }}
+
+            .patient-text {{
+                font-size: 24px;
+                font-weight: 700;
+                color: #102a43;
+                margin-bottom: 18px;
+            }}
+
+            .positive-result {{
+                background: #ffe5e5;
+                color: #b30000;
+                font-size: 28px;
+                font-weight: 800;
+                padding: 18px;
+                border-radius: 14px;
+                margin-top: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            }}
+
+            .negative-result {{
+                background: #e8fff0;
+                color: #0b7a33;
+                font-size: 28px;
+                font-weight: 800;
+                padding: 18px;
+                border-radius: 14px;
+                margin-top: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            }}
+
+            .note-text {{
+                color: #243b53;
+                font-size: 16px;
+                margin-top: 16px;
+                font-weight: 500;
+            }}
+
+            /* All labels white */
+            label, .stTextInput label, .stNumberInput label, .stSelectbox label {{
+                color: white !important;
+                font-weight: 600 !important;
+                text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+            }}
+
+            .stTextInput div[data-testid="stWidgetLabel"] label,
+            .stNumberInput div[data-testid="stWidgetLabel"] label,
+            .stSelectbox div[data-testid="stWidgetLabel"] label {{
+                color: white !important;
+                font-weight: 600 !important;
+                text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
             }}
 
             .stTextInput > div > div > input,
@@ -133,7 +184,6 @@ if st.session_state.page == "home":
 
     st.markdown("<div style='height:120px;'></div>", unsafe_allow_html=True)
 
-    # Center button properly
     left_col, center_col, right_col = st.columns([2.5, 2, 2.5])
 
     with center_col:
@@ -237,7 +287,7 @@ elif st.session_state.page == "prediction":
 elif st.session_state.page == "result":
 
     st.markdown(
-        '<div class="section-title">RESULT</div>',
+        '<div class="section-title">Prediction Result</div>',
         unsafe_allow_html=True
     )
 
@@ -247,12 +297,29 @@ elif st.session_state.page == "result":
     st.markdown('<div class="result-box">', unsafe_allow_html=True)
 
     if patient_name.strip():
-        st.write(f"### Patient Name: {patient_name}")
+        st.markdown(
+            f'<div class="patient-text">Patient Name: {patient_name}</div>',
+            unsafe_allow_html=True
+        )
 
     if result == "Lung Cancer":
-        st.error("Prediction Result: Lung Cancer")
+        st.markdown(
+            '<div class="positive-result">Prediction Result: Lung Cancer</div>',
+            unsafe_allow_html=True
+        )
+        st.markdown(
+            '<div class="note-text">Please consult a doctor for further medical evaluation.</div>',
+            unsafe_allow_html=True
+        )
     else:
-        st.success("Prediction Result: No Lung Cancer")
+        st.markdown(
+            '<div class="negative-result">Prediction Result: No Lung Cancer</div>',
+            unsafe_allow_html=True
+        )
+        st.markdown(
+            '<div class="note-text">Currently, no lung cancer risk is predicted based on the given symptoms.</div>',
+            unsafe_allow_html=True
+        )
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -267,10 +334,3 @@ elif st.session_state.page == "result":
     with col2:
         if st.button("Go to Home Page", key="go_home_btn"):
             st.session_state.page = "home"
-         
-        
-               
-
-
-   
-  
