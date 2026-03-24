@@ -120,7 +120,7 @@ if "patient_name" not in st.session_state:
 if st.session_state.page == "home":
 
     st.markdown(
-        '<div class="main-title">Lung Cancer Prediction </div>',
+        '<div class="main-title">LUNG CANCER PREDICTION</div>',
         unsafe_allow_html=True
     )
 
@@ -159,7 +159,7 @@ if st.session_state.page == "home":
             st.session_state.page = "prediction"
 
 # ---------- PREDICTION PAGE ----------
-elif st.session_state.page == "prediction":
+elif st.session_state.page == "PREDICTION":
 
     st.markdown(
         '<div class="section-title">Enter Patient Details and Symptoms</div>',
@@ -237,6 +237,7 @@ elif st.session_state.page == "result":
 
     st.markdown(
         '<div class="section-title"> RESULT</div>',
+         unsafe_allow_html=True
         )
     patient_name = st.session_state.patient_name
     result = st.session_state.prediction_result
