@@ -11,14 +11,14 @@ st.set_page_config(
     layout="centered"
 )
 
-# ---------- Safe Rerun Function ----------
+# ---------- Safe Rerun ----------
 def safe_rerun():
     try:
         st.rerun()
     except AttributeError:
         st.experimental_rerun()
 
-# ---------- Background Image Function ----------
+# ---------- Background Image ----------
 def add_bg_from_local(image_file):
     if os.path.exists(image_file):
         with open(image_file, "rb") as image:
@@ -49,7 +49,7 @@ def add_bg_from_local(image_file):
                 text-align: center;
                 font-size: 18px;
                 color: #243b53;
-                margin-bottom: 28px;
+                margin-bottom: 25px;
                 font-weight: 500;
             }}
 
@@ -63,7 +63,7 @@ def add_bg_from_local(image_file):
             }}
 
             .result-box {{
-                background: rgba(255,255,255,0.85);
+                background: rgba(255,255,255,0.88);
                 padding: 22px;
                 border-radius: 18px;
                 margin-top: 20px;
@@ -71,11 +71,25 @@ def add_bg_from_local(image_file):
                 text-align: center;
             }}
 
-            [data-baseweb="select"] > div,
+            .start-btn-space {{
+                height: 110px;
+            }}
+
+            .stTextInput > div > div > input,
             .stNumberInput > div > div > input,
-            .stTextInput > div > div > input {{
-                background-color: rgba(255,255,255,0.88);
+            [data-baseweb="select"] > div {{
+                background-color: rgba(255,255,255,0.92);
                 border-radius: 10px;
+            }}
+
+            div.stButton > button {{
+                border-radius: 12px;
+                font-weight: 700;
+                border: none;
+            }}
+
+            div.stButton > button:hover {{
+                color: white;
             }}
             </style>
             """,
@@ -117,42 +131,40 @@ if st.session_state.page == "home":
         '<div class="main-title">Lung Cancer Prediction Using Machine Learning</div>',
         unsafe_allow_html=True
     )
+
     st.markdown(
         '<div class="sub-text">Early screening support using machine learning and symptom-based prediction</div>',
         unsafe_allow_html=True
     )
 
-    # Extra space for center alignment
-    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    st.markdown('<div class="start-btn-space"></div>', unsafe_allow_html=True)
 
-    # Center button
-    left, center, right = st.columns([2, 3, 2])
+    # Center the Start button properly
+    left_col, center_col, right_col = st.columns([1.7, 1.2, 1.7])
 
-    with center:
-        st.markdown("""
+    with center_col:
+        st.markdown(
+            """
             <style>
-            div.stButton > button:first-child {
-                display: block;
-                margin: 0 auto;
+            div[data-testid="stButton"] > button[kind="secondary"],
+            div[data-testid="stButton"] > button[kind="primary"] {
                 width: 100%;
-                max-width: 280px;
-                height: 55px;
-                border-radius: 14px;
-                font-size: 20px;
-                font-weight: 700;
+                min-height: 62px;
+                font-size: 18px;
                 background: linear-gradient(to right, #0f4c81, #1f77b4);
                 color: white;
-                border: none;
                 box-shadow: 0 6px 16px rgba(0,0,0,0.15);
             }
-            div.stButton > button:first-child:hover {
+
+            div[data-testid="stButton"] > button[kind="secondary"]:hover,
+            div[data-testid="stButton"] > button[kind="primary"]:hover {
                 background: linear-gradient(to right, #0b3c66, #145a86);
                 color: white;
-                transform: scale(1.02);
-                transition: 0.2s ease-in-out;
             }
             </style>
-        """, unsafe_allow_html=True)
+            """,
+            unsafe_allow_html=True
+        )
 
         if st.button("Start Prediction", key="start_prediction_btn"):
             st.session_state.page = "prediction"
@@ -168,7 +180,7 @@ elif st.session_state.page == "prediction":
 
     name = st.text_input("Patient Name")
 
-    gender = st.selectbox("Gender (Male=1, Female=0)", [1, 0])
+    gender = st.selectbox("Gender (Male = 1, Female = 0)", [1, 0])
     age = st.number_input("Age", min_value=1, max_value=120, value=30)
     smoking = st.selectbox("Smoking (1 = No, 2 = Yes)", [1, 2])
     fatigue = st.selectbox("Fatigue (1 = No, 2 = Yes)", [1, 2])
@@ -185,18 +197,45 @@ elif st.session_state.page == "prediction":
     swallowing_difficulty = st.selectbox("Swallowing Difficulty (1 = No, 2 = Yes)", [1, 2])
     chest_pain = st.selectbox("Chest Pain (1 = No, 2 = Yes)", [1, 2])
 
+    st.markdown("<br>", unsafe_allow_html=True)
+
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("Predict"):
+        st.markdown(
+            """
+            <style>
+            div[data-testid="stButton"] > button {
+                background: linear-gradient(to right, #0f4c81, #1f77b4);
+                color: white;
+                width: 100%;
+                min-height: 50px;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+
+        if st.button("Predict", key="predict_btn"):
             if model is None:
                 st.error("Model is not loaded. Please check the model file.")
             else:
                 input_data = np.array([[
-                    gender, age, smoking, fatigue, shortness_of_breath,
-                    yellow_fingers, anxiety, peer_pressure, chronic_disease,
-                    allergy, wheezing, alcohol_consuming, coughing,
-                    swallowing_difficulty, chest_pain
+                    gender,
+                    age,
+                    smoking,
+                    fatigue,
+                    shortness_of_breath,
+                    yellow_fingers,
+                    anxiety,
+                    peer_pressure,
+                    chronic_disease,
+                    allergy,
+                    wheezing,
+                    alcohol_consuming,
+                    coughing,
+                    swallowing_difficulty,
+                    chest_pain
                 ]])
 
                 try:
@@ -215,7 +254,7 @@ elif st.session_state.page == "prediction":
                     st.error(f"Prediction error: {e}")
 
     with col2:
-        if st.button("Back to Home"):
+        if st.button("Back to Home", key="back_home_btn"):
             st.session_state.page = "home"
             safe_rerun()
 
@@ -232,7 +271,7 @@ elif st.session_state.page == "result":
 
     st.markdown('<div class="result-box">', unsafe_allow_html=True)
 
-    if patient_name:
+    if patient_name.strip():
         st.write(f"### Patient Name: {patient_name}")
 
     if result == "Lung Cancer":
@@ -242,14 +281,17 @@ elif st.session_state.page == "result":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
+    st.markdown("<br>", unsafe_allow_html=True)
+
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("Back to Prediction Page"):
+        if st.button("Back to Prediction Page", key="back_prediction_btn"):
             st.session_state.page = "prediction"
             safe_rerun()
 
     with col2:
-        if st.button("Go to Home Page"):
+        if st.button("Go to Home Page", key="go_home_btn"):
             st.session_state.page = "home"
             safe_rerun()
+            
