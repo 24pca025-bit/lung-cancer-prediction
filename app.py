@@ -11,13 +11,6 @@ st.set_page_config(
     layout="centered"
 )
 
-# ---------- Safe Rerun ----------
-def safe_rerun():
-    try:
-        st.rerun()
-    except AttributeError:
-        st.experimental_rerun()
-
 # ---------- Background Image ----------
 def add_bg_from_local(image_file):
     if os.path.exists(image_file):
@@ -63,16 +56,12 @@ def add_bg_from_local(image_file):
             }}
 
             .result-box {{
-                background: rgba(255,255,255,0.88);
+                background: rgba(255,255,255,0.90);
                 padding: 22px;
                 border-radius: 18px;
                 margin-top: 20px;
                 box-shadow: 0 6px 18px rgba(0,0,0,0.10);
                 text-align: center;
-            }}
-
-            .start-btn-space {{
-                height: 110px;
             }}
 
             .stTextInput > div > div > input,
@@ -86,6 +75,7 @@ def add_bg_from_local(image_file):
                 border-radius: 12px;
                 font-weight: 700;
                 border: none;
+                width: 100%;
             }}
 
             div.stButton > button:hover {{
@@ -101,18 +91,20 @@ def add_bg_from_local(image_file):
 # ---------- Apply Background ----------
 add_bg_from_local("lungs_bg.jpg")
 
-# ---------- Load Model ----------
-model = None
-model_file = "lung_cancer_rf_model.pkl"
-
-if os.path.exists(model_file):
+# ---------- Cached Model Load ----------
+@st.cache_resource
+def load_model():
+    model_file = "lung_cancer_rf_model.pkl"
+    if not os.path.exists(model_file):
+        return None, f"Model file '{model_file}' not found."
     try:
         with open(model_file, "rb") as file:
             model = pickle.load(file)
+        return model, None
     except Exception as e:
-        st.error(f"Model loading error: {e}")
-else:
-    st.error(f"Model file '{model_file}' not found.")
+        return None, f"Model loading error: {e}"
+
+model, model_error = load_model()
 
 # ---------- Session State ----------
 if "page" not in st.session_state:
@@ -137,27 +129,22 @@ if st.session_state.page == "home":
         unsafe_allow_html=True
     )
 
-    st.markdown('<div class="start-btn-space"></div>', unsafe_allow_html=True)
+    st.markdown("<div style='height:120px;'></div>", unsafe_allow_html=True)
 
-    # Center the Start button properly
-    left_col, center_col, right_col = st.columns([1.7, 1.2, 1.7])
+    left_col, center_col, right_col = st.columns([2.2, 1.6, 2.2])
 
     with center_col:
         st.markdown(
             """
             <style>
-            div[data-testid="stButton"] > button[kind="secondary"],
-            div[data-testid="stButton"] > button[kind="primary"] {
-                width: 100%;
-                min-height: 62px;
+            div[data-testid="stButton"] > button {
+                min-height: 60px;
                 font-size: 18px;
                 background: linear-gradient(to right, #0f4c81, #1f77b4);
                 color: white;
                 box-shadow: 0 6px 16px rgba(0,0,0,0.15);
             }
-
-            div[data-testid="stButton"] > button[kind="secondary"]:hover,
-            div[data-testid="stButton"] > button[kind="primary"]:hover {
+            div[data-testid="stButton"] > button:hover {
                 background: linear-gradient(to right, #0b3c66, #145a86);
                 color: white;
             }
@@ -168,7 +155,6 @@ if st.session_state.page == "home":
 
         if st.button("Start Prediction", key="start_prediction_btn"):
             st.session_state.page = "prediction"
-            safe_rerun()
 
 # ---------- PREDICTION PAGE ----------
 elif st.session_state.page == "prediction":
@@ -177,6 +163,9 @@ elif st.session_state.page == "prediction":
         '<div class="section-title">Enter Patient Details and Symptoms</div>',
         unsafe_allow_html=True
     )
+
+    if model_error:
+        st.error(model_error)
 
     name = st.text_input("Patient Name")
 
@@ -202,23 +191,9 @@ elif st.session_state.page == "prediction":
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown(
-            """
-            <style>
-            div[data-testid="stButton"] > button {
-                background: linear-gradient(to right, #0f4c81, #1f77b4);
-                color: white;
-                width: 100%;
-                min-height: 50px;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
-
         if st.button("Predict", key="predict_btn"):
             if model is None:
-                st.error("Model is not loaded. Please check the model file.")
+                st.error("Model not loaded properly.")
             else:
                 input_data = np.array([[
                     gender,
@@ -248,15 +223,12 @@ elif st.session_state.page == "prediction":
                         st.session_state.prediction_result = "No Lung Cancer"
 
                     st.session_state.page = "result"
-                    safe_rerun()
-
                 except Exception as e:
                     st.error(f"Prediction error: {e}")
 
     with col2:
         if st.button("Back to Home", key="back_home_btn"):
             st.session_state.page = "home"
-            safe_rerun()
 
 # ---------- RESULT PAGE ----------
 elif st.session_state.page == "result":
@@ -288,10 +260,11 @@ elif st.session_state.page == "result":
     with col1:
         if st.button("Back to Prediction Page", key="back_prediction_btn"):
             st.session_state.page = "prediction"
-            safe_rerun()
 
     with col2:
         if st.button("Go to Home Page", key="go_home_btn"):
             st.session_state.page = "home"
-            safe_rerun()
             
+           
+         
+   
