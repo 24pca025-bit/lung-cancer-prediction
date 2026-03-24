@@ -70,6 +70,15 @@ def add_bg_from_local(image_file):
             text-align: center;
         }}
 
+        .result-box {{
+            background: rgba(255,255,255,0.85);
+            padding: 22px;
+            border-radius: 18px;
+            margin-top: 20px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+            text-align: center;
+        }}
+
         div.stButton > button {{
             background: linear-gradient(to right, #0f4c81, #1f77b4);
             color: white;
@@ -104,42 +113,56 @@ with open("lung_cancer_rf_model.pkl", "rb") as file:
     model = pickle.load(file)
 
 # ---------- Session State ----------
-if "show_form" not in st.session_state:
-    st.session_state.show_form = False
+if "page" not in st.session_state:
+    st.session_state.page = "home"
 
-# ---------- Index / Home Section ----------
-st.markdown(
-    '<div class="banner-box">🫁 <b>AI-Based Lung Cancer Screening System</b> 🫁</div>',
-    unsafe_allow_html=True
-)
-st.markdown(
-    '<div class="main-title">Lung Cancer Prediction Using Machine Learning</div>',
-    unsafe_allow_html=True
-)
-st.markdown(
-    '<div class="sub-text">Early screening support using machine learning and symptom-based prediction</div>',
-    unsafe_allow_html=True
-)
+if "prediction_result" not in st.session_state:
+    st.session_state.prediction_result = None
 
-st.markdown(
-    """
-    <div class="intro-box">
-    <b>Welcome!</b><br><br>
-    This application is developed to predict lung cancer based on patient symptoms and basic details.
-    It uses a machine learning model trained on symptom data to classify whether lung cancer is present or not.
-    <br><br>
-    Please click the button below to enter patient details and continue to prediction.
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+if "patient_name" not in st.session_state:
+    st.session_state.patient_name = ""
 
-if st.button("Start Prediction"):
-    st.session_state.show_form = True
+# ---------- HOME PAGE ----------
+if st.session_state.page == "home":
+    st.markdown(
+        '<div class="banner-box">🫁 <b>AI-Based Lung Cancer Screening System</b> 🫁</div>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        '<div class="main-title">Lung Cancer Prediction Using Machine Learning</div>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        '<div class="sub-text">Early screening support using machine learning and symptom-based prediction</div>',
+        unsafe_allow_html=True
+    )
 
-# ---------- Prediction Form Section ----------
-if st.session_state.show_form:
-    st.markdown('<div class="section-title">Patient Details and Symptoms</div>', unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="intro-box">
+        <b>Welcome!</b><br><br>
+        This application predicts lung cancer based on patient details and symptoms using a trained machine learning model.
+        <br><br>
+        Click the button below to continue to the prediction page.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    if st.button("Start Prediction"):
+        st.session_state.page = "prediction"
+        st.rerun()
+
+# ---------- PREDICTION PAGE ----------
+elif st.session_state.page == "prediction":
+    st.markdown(
+        '<div class="banner-box">🩺 <b>Prediction Page</b></div>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        '<div class="section-title">Enter Patient Details and Symptoms</div>',
+        unsafe_allow_html=True
+    )
 
     name = st.text_input("Patient Name")
 
@@ -160,23 +183,68 @@ if st.session_state.show_form:
     swallowing_difficulty = st.selectbox("Swallowing Difficulty (1 = No, 2 = Yes)", [1, 2])
     chest_pain = st.selectbox("Chest Pain (1 = No, 2 = Yes)", [1, 2])
 
-    if st.button("Predict"):
-        input_data = np.array([[gender, age, smoking, fatigue, shortness_of_breath,
-                                yellow_fingers, anxiety, peer_pressure,
-                                chronic_disease, allergy, wheezing,
-                                alcohol_consuming, coughing,
-                                swallowing_difficulty, chest_pain]])
+    col1, col2 = st.columns(2)
 
-        prediction = model.predict(input_data)
+    with col1:
+        if st.button("Predict"):
+            input_data = np.array([[gender, age, smoking, fatigue, shortness_of_breath,
+                                    yellow_fingers, anxiety, peer_pressure,
+                                    chronic_disease, allergy, wheezing,
+                                    alcohol_consuming, coughing,
+                                    swallowing_difficulty, chest_pain]])
 
-        if prediction[0] == 1:
-            if name:
-                st.error(f"Prediction Result for {name}: Lung Cancer")
+            prediction = model.predict(input_data)
+
+            st.session_state.patient_name = name
+
+            if prediction[0] == 1:
+                st.session_state.prediction_result = "Lung Cancer"
             else:
-                st.error("Prediction Result: Lung Cancer")
-        else:
-            if name:
-                st.success(f"Prediction Result for {name}: No Lung Cancer")
-            else:
-                st.success("Prediction Result: No Lung Cancer")
-            
+                st.session_state.prediction_result = "No Lung Cancer"
+
+            st.session_state.page = "result"
+            st.rerun()
+
+    with col2:
+        if st.button("Back to Home"):
+            st.session_state.page = "home"
+            st.rerun()
+
+# ---------- RESULT PAGE ----------
+elif st.session_state.page == "result":
+    st.markdown(
+        '<div class="banner-box">📋 <b>Prediction Result Page</b></div>',
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        '<div class="section-title">Final Result</div>',
+        unsafe_allow_html=True
+    )
+
+    patient_name = st.session_state.patient_name
+    result = st.session_state.prediction_result
+
+    st.markdown('<div class="result-box">', unsafe_allow_html=True)
+
+    if patient_name:
+        st.write(f"### Patient Name: {patient_name}")
+
+    if result == "Lung Cancer":
+        st.error("Prediction Result: Lung Cancer")
+    else:
+        st.success("Prediction Result: No Lung Cancer")
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("Back to Prediction Page"):
+            st.session_state.page = "prediction"
+            st.rerun()
+
+    with col2:
+        if st.button("Go to Home Page"):
+            st.session_state.page = "home"
+            st.rerun()
+           
