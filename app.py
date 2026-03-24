@@ -141,10 +141,7 @@ if st.session_state.page == "home":
 
 # ---------- PREDICTION PAGE ----------
 elif st.session_state.page == "prediction":
-    st.markdown(
-        '<div class="banner-box">🩺 <b>Prediction Page</b></div>',
-        unsafe_allow_html=True
-    )
+   
     st.markdown(
         '<div class="section-title">Enter Patient Details and Symptoms</div>',
         unsafe_allow_html=True
@@ -198,10 +195,7 @@ elif st.session_state.page == "prediction":
 
 # ---------- RESULT PAGE ----------
 elif st.session_state.page == "result":
-    st.markdown(
-        '<div class="banner-box">📋 <b>Prediction Result Page</b></div>',
-        unsafe_allow_html=True
-    )
+    
     st.markdown(
         '<div class="section-title">Final Result</div>',
         unsafe_allow_html=True
