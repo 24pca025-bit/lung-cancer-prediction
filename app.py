@@ -148,7 +148,7 @@ if st.session_state.page == "home":
             }
             div[data-testid="stButton"] > button:hover {
                 background: linear-gradient(to right, #0b3c66, #145a86);
-                color: Blue;
+                color: White;
             }
             </style>
             """,
