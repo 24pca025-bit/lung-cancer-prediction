@@ -231,10 +231,10 @@ elif st.session_state.page == "prediction":
             st.session_state.page = "home"
 
 # ---------- RESULT PAGE ----------
-elif st.session_state.page == "RESULT":
+elif st.session_state.page == "result":
 
     st.markdown(
-        '<div class="section-title">Result</div>',
+        '<div class="section-title">RESULT</div>',
         unsafe_allow_html=True
     )
 
