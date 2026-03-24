@@ -232,14 +232,12 @@ elif st.session_state.page == "prediction":
         if st.button("Back to Home", key="back_home_btn"):
             st.session_state.page = "home"
 
-# ---------- RESULT PAGE ----------
+# ---------- RESULT ----------
 elif st.session_state.page == "result":
 
     st.markdown(
-        '<div class="section-title">Final Result</div>',
-        unsafe_allow_html=True
-    )
-
+        '<div class="section-title"> RESULT</div>',
+        )
     patient_name = st.session_state.patient_name
     result = st.session_state.prediction_result
 
