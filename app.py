@@ -135,6 +135,9 @@ if st.session_state.page == "home":
     )
 
 
+   col1, col2, col3 = st.columns([1, 2, 1])
+
+with col2:
     if st.button("Start Prediction"):
         st.session_state.page = "prediction"
         st.rerun()
