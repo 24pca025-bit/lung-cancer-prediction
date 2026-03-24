@@ -137,9 +137,11 @@ if st.session_state.page == "home":
         st.markdown(
             """
             <style>
+            <center>
             div[data-testid="stButton"] > button {
                 min-height: 60px;
                 font-size: 18px;
+                </center>
                 background: linear-gradient(to right, #0f4c81, #1f77b4);
                 color: white;
                 box-shadow: 0 6px 16px rgba(0,0,0,0.15);
