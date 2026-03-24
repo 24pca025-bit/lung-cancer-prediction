@@ -21,7 +21,7 @@ def add_bg_from_local(image_file):
             f"""
             <style>
             .stApp {{
-                background-image: linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.88)),
+                background-image: linear-gradient(rgba(0,0,0,0.40), rgba(0,0,0,0.40)),
                                   url("data:image/jpg;base64,{encoded_string}");
                 background-size: cover;
                 background-position: center;
@@ -32,42 +32,44 @@ def add_bg_from_local(image_file):
                 text-align: center;
                 font-size: 52px;
                 font-weight: 900;
-                color: #102a43;
+                color: white;
                 margin-top: 10px;
                 margin-bottom: 8px;
-                text-shadow: 1px 1px 2px rgba(255,255,255,0.7);
+                text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
             }}
 
             .sub-text {{
                 text-align: center;
                 font-size: 18px;
-                color: #243b53;
+                color: #f1f5f9;
                 margin-bottom: 25px;
                 font-weight: 500;
+                text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
             }}
 
             .section-title {{
                 font-size: 28px;
                 font-weight: 800;
-                color: #1f3b73;
+                color: white;
                 margin-top: 20px;
                 margin-bottom: 12px;
                 text-align: center;
+                text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
             }}
 
             .result-box {{
-                background: rgba(255,255,255,0.90);
+                background: rgba(255,255,255,0.92);
                 padding: 22px;
                 border-radius: 18px;
                 margin-top: 20px;
-                box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+                box-shadow: 0 6px 18px rgba(0,0,0,0.25);
                 text-align: center;
             }}
 
             .stTextInput > div > div > input,
             .stNumberInput > div > div > input,
             [data-baseweb="select"] > div {{
-                background-color: rgba(255,255,255,0.92);
+                background-color: rgba(255,255,255,0.95);
                 border-radius: 10px;
             }}
 
@@ -120,7 +122,7 @@ if "patient_name" not in st.session_state:
 if st.session_state.page == "home":
 
     st.markdown(
-        '<div class="main-title">LUNG CANCER PREDICTION </div>',
+        '<div class="main-title">LUNG CANCER PREDICTION</div>',
         unsafe_allow_html=True
     )
 
@@ -131,7 +133,8 @@ if st.session_state.page == "home":
 
     st.markdown("<div style='height:120px;'></div>", unsafe_allow_html=True)
 
-    left_col, center_col, right_col = st.columns([2.2, 1.6, 2.2])
+    # Center button properly
+    left_col, center_col, right_col = st.columns([2.5, 2, 2.5])
 
     with center_col:
         st.markdown(
@@ -142,7 +145,7 @@ if st.session_state.page == "home":
                 font-size: 18px;
                 background: linear-gradient(to right, #0f4c81, #1f77b4);
                 color: white;
-                box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+                box-shadow: 0 6px 16px rgba(0,0,0,0.25);
             }
             div[data-testid="stButton"] > button:hover {
                 background: linear-gradient(to right, #0b3c66, #145a86);
@@ -264,3 +267,10 @@ elif st.session_state.page == "result":
     with col2:
         if st.button("Go to Home Page", key="go_home_btn"):
             st.session_state.page = "home"
+         
+        
+               
+
+
+   
+  
