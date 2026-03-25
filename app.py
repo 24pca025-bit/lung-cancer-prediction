@@ -21,7 +21,7 @@ def add_bg_from_local(image_file):
             f"""
             <style>
             .stApp {{
-                background-image: linear-gradient(rgba(0,0,0,0.40), rgba(0,0,0,0.40)),
+                background-image: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
                                   url("data:image/jpg;base64,{encoded_string}");
                 background-size: cover;
                 background-position: center;
@@ -52,57 +52,62 @@ def add_bg_from_local(image_file):
                 font-weight: 800;
                 color: white;
                 margin-top: 20px;
-                margin-bottom: 12px;
+                margin-bottom: 16px;
                 text-align: center;
                 text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
             }}
 
-            .result-box {{
-                background: rgba(255,255,255,0.94);
-                padding: 28px;
-                border-radius: 18px;
-                margin-top: 20px;
-                box-shadow: 0 8px 22px rgba(0,0,0,0.25);
-                text-align: center;
-            }}
-
-            .patient-text {{
-                font-size: 24px;
-                font-weight: 700;
+            .patient-name-box {{
+                width: 100%;
+                background: rgba(255,255,255,0.96);
                 color: #102a43;
-                margin-bottom: 18px;
+                font-size: 26px;
+                font-weight: 800;
+                padding: 20px 24px;
+                border-radius: 24px;
+                margin-top: 12px;
+                margin-bottom: 20px;
+                box-shadow: 0 8px 22px rgba(0,0,0,0.20);
+                text-align: left;
             }}
 
             .positive-result {{
-                background: #ffe5e5;
+                width: 100%;
+                background: rgba(255, 230, 230, 0.95);
                 color: #b30000;
                 font-size: 28px;
                 font-weight: 800;
-                padding: 18px;
-                border-radius: 14px;
+                padding: 22px;
+                border-radius: 20px;
                 margin-top: 10px;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+                text-align: left;
             }}
 
             .negative-result {{
-                background: #e8fff0;
+                width: 100%;
+                background: rgba(232, 255, 240, 0.95);
                 color: #0b7a33;
                 font-size: 28px;
                 font-weight: 800;
-                padding: 18px;
-                border-radius: 14px;
+                padding: 22px;
+                border-radius: 20px;
                 margin-top: 10px;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+                text-align: left;
             }}
 
             .note-text {{
-                color: #243b53;
-                font-size: 16px;
-                margin-top: 16px;
-                font-weight: 500;
+                color: #0b2240;
+                font-size: 18px;
+                margin-top: 14px;
+                font-weight: 700;
+                text-align: left;
+                background: rgba(255,255,255,0.20);
+                padding: 10px 12px;
+                border-radius: 10px;
             }}
 
-            /* All labels white */
             label, .stTextInput label, .stNumberInput label, .stSelectbox label {{
                 color: white !important;
                 font-weight: 600 !important;
@@ -125,14 +130,19 @@ def add_bg_from_local(image_file):
             }}
 
             div.stButton > button {{
-                border-radius: 12px;
+                border-radius: 14px;
                 font-weight: 700;
                 border: none;
                 width: 100%;
+                min-height: 52px;
+                font-size: 18px;
+                background: rgba(255,255,255,0.95);
+                color: #1f2d3d;
             }}
 
             div.stButton > button:hover {{
-                color: white;
+                color: white !important;
+                background: linear-gradient(to right, #0b3c66, #145a86) !important;
             }}
             </style>
             """,
@@ -227,7 +237,6 @@ elif st.session_state.page == "prediction":
     smoking = st.selectbox("Smoking (1 = No, 2 = Yes)", [1, 2])
     fatigue = st.selectbox("Fatigue (1 = No, 2 = Yes)", [1, 2])
     shortness_of_breath = st.selectbox("Shortness of Breath (1 = No, 2 = Yes)", [1, 2])
-
     yellow_fingers = st.selectbox("Yellow Fingers (1 = No, 2 = Yes)", [1, 2])
     anxiety = st.selectbox("Anxiety (1 = No, 2 = Yes)", [1, 2])
     peer_pressure = st.selectbox("Peer Pressure (1 = No, 2 = Yes)", [1, 2])
@@ -247,6 +256,8 @@ elif st.session_state.page == "prediction":
         if st.button("Predict", key="predict_btn"):
             if model is None:
                 st.error("Model not loaded properly.")
+            elif not name.strip():
+                st.warning("Please enter patient name.")
             else:
                 input_data = np.array([[
                     gender,
@@ -268,7 +279,7 @@ elif st.session_state.page == "prediction":
 
                 try:
                     prediction = model.predict(input_data)
-                    st.session_state.patient_name = name
+                    st.session_state.patient_name = name.strip()
 
                     if prediction[0] == 1:
                         st.session_state.prediction_result = "Lung Cancer"
@@ -276,31 +287,35 @@ elif st.session_state.page == "prediction":
                         st.session_state.prediction_result = "No Lung Cancer"
 
                     st.session_state.page = "result"
+                    st.rerun()
                 except Exception as e:
                     st.error(f"Prediction error: {e}")
 
     with col2:
         if st.button("Back to Home", key="back_home_btn"):
             st.session_state.page = "home"
+            st.rerun()
 
 # ---------- RESULT PAGE ----------
 elif st.session_state.page == "result":
+
+    patient_name = st.session_state.patient_name
+    result = st.session_state.prediction_result
 
     st.markdown(
         '<div class="section-title">Prediction Result</div>',
         unsafe_allow_html=True
     )
 
-    patient_name = st.session_state.patient_name
-    result = st.session_state.prediction_result
-
-    st.markdown('<div class="result-box">', unsafe_allow_html=True)
-
-    if patient_name.strip():
-        st.markdown(
-            f'<div class="patient-text">Patient Name: {patient_name}</div>',
-            unsafe_allow_html=True
-        )
+    # Patient name ONLY inside white box
+    st.markdown(
+        f"""
+        <div class="patient-name-box">
+            Patient Name: {patient_name}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     if result == "Lung Cancer":
         st.markdown(
@@ -321,8 +336,6 @@ elif st.session_state.page == "result":
             unsafe_allow_html=True
         )
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
     st.markdown("<br>", unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
@@ -330,7 +343,9 @@ elif st.session_state.page == "result":
     with col1:
         if st.button("Back to Prediction Page", key="back_prediction_btn"):
             st.session_state.page = "prediction"
+            st.rerun()
 
     with col2:
         if st.button("Go to Home Page", key="go_home_btn"):
             st.session_state.page = "home"
+            st.rerun()
